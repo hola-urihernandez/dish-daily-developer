@@ -24,6 +24,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
 import { DailyMenu, Dish, Menu } from '@/types';
 import { useLanguage } from '@/context/LanguageContext';
 import DishSelector from './DishSelector';
