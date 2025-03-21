@@ -34,7 +34,10 @@ const DishSelector: React.FC<DishSelectorProps> = ({
   const [open, setOpen] = useState(false);
   const { language, t } = useLanguage();
 
-  const selectedDish = dishes.find(dish => dish.id === selectedDishId);
+  // Ensure dishes array is never undefined
+  const dishesArray = Array.isArray(dishes) ? dishes : [];
+  
+  const selectedDish = dishesArray.find(dish => dish.id === selectedDishId);
 
   return (
     <div>
@@ -76,7 +79,6 @@ const DishSelector: React.FC<DishSelectorProps> = ({
                 es: "Buscar platos...", 
                 ca: "Cercar plats..." 
               })}
-              icon={<Search className="h-4 w-4" />}
             />
             <CommandEmpty>
               {t({ 
@@ -86,7 +88,7 @@ const DishSelector: React.FC<DishSelectorProps> = ({
               })}
             </CommandEmpty>
             <CommandGroup className="max-h-60 overflow-y-auto">
-              {dishes.map((dish) => (
+              {dishesArray.map((dish) => (
                 <CommandItem
                   key={dish.id}
                   value={dish.name[language]}
