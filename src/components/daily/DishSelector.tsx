@@ -8,6 +8,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,  // Added CommandList import
 } from '@/components/ui/command';
 import {
   Popover,
@@ -80,34 +81,36 @@ const DishSelector: React.FC<DishSelectorProps> = ({
                 ca: "Cercar plats..." 
               })}
             />
-            <CommandEmpty>
-              {t({ 
-                en: "No dish found", 
-                es: "No se encontró ningún plato", 
-                ca: "No s'ha trobat cap plat" 
-              })}
-            </CommandEmpty>
-            <CommandGroup className="max-h-60 overflow-y-auto">
-              {dishesArray.map((dish) => (
-                <CommandItem
-                  key={dish.id}
-                  value={dish.name[language]}
-                  onSelect={() => {
-                    onSelectDish(dish.id === selectedDishId ? null : dish.id);
-                    setOpen(false);
-                  }}
-                  className="cursor-pointer"
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      selectedDishId === dish.id ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  {dish.name[language]}
-                </CommandItem>
-              ))}
-            </CommandGroup>
+            <CommandList> {/* Add CommandList wrapper */}
+              <CommandEmpty>
+                {t({ 
+                  en: "No dish found", 
+                  es: "No se encontró ningún plato", 
+                  ca: "No s'ha trobat cap plat" 
+                })}
+              </CommandEmpty>
+              <CommandGroup className="max-h-60 overflow-y-auto">
+                {dishesArray.map((dish) => (
+                  <CommandItem
+                    key={dish.id}
+                    value={dish.name[language]}
+                    onSelect={() => {
+                      onSelectDish(dish.id === selectedDishId ? null : dish.id);
+                      setOpen(false);
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        selectedDishId === dish.id ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    {dish.name[language]}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList> {/* Close CommandList wrapper */}
           </Command>
         </PopoverContent>
       </Popover>
