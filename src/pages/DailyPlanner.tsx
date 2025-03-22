@@ -184,14 +184,6 @@ const DailyPlannerPage = () => {
           setDailyMenus(prevDailyMenus => [...prevDailyMenus, newDailyMenu]);
         }
       }
-      
-      toast({
-        title: t({ 
-          en: "Daily menu saved", 
-          es: "Menú diario guardado", 
-          ca: "Menú diari guardat" 
-        })
-      });
     } catch (error) {
       console.error('Error saving daily menu:', error);
       toast({

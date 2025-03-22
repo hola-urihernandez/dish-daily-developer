@@ -53,6 +53,7 @@ const DailyPlanner: React.FC<DailyPlannerProps> = ({
   const [selectedFirstCourse, setSelectedFirstCourse] = useState<string | null>(null);
   const [selectedSecondCourse, setSelectedSecondCourse] = useState<string | null>(null);
   const [selectedDessert, setSelectedDessert] = useState<string | null>(null);
+  const [currentMenuId, setCurrentMenuId] = useState<string | null>(null);
   
   const { t, language } = useLanguage();
   const { toast } = useToast();
@@ -78,12 +79,14 @@ const DailyPlanner: React.FC<DailyPlannerProps> = ({
         setSelectedFirstCourse(existingMenu.firstCourse);
         setSelectedSecondCourse(existingMenu.secondCourse);
         setSelectedDessert(existingMenu.dessert);
+        setCurrentMenuId(existingMenu.id);
       } else {
         // Reset selections if no existing menu
         setSelectedMenuId(null);
         setSelectedFirstCourse(null);
         setSelectedSecondCourse(null);
         setSelectedDessert(null);
+        setCurrentMenuId(null);
       }
     }
   };
@@ -111,7 +114,7 @@ const DailyPlanner: React.FC<DailyPlannerProps> = ({
     const now = new Date();
     
     const dailyMenu: DailyMenu = {
-      id: existingMenu?.id || generateId(),
+      id: currentMenuId || generateId(),
       date: new Date(date),
       menuId: selectedMenuId,
       firstCourse: selectedFirstCourse,
@@ -123,16 +126,18 @@ const DailyPlanner: React.FC<DailyPlannerProps> = ({
     
     onSaveDailyMenu(dailyMenu);
     
+    const isUpdate = !!existingMenu;
+    
     toast({
       title: t({ 
-        en: "Daily menu saved", 
-        es: "Menú diario guardado", 
-        ca: "Menú diari guardat" 
+        en: isUpdate ? "Daily menu updated" : "Daily menu saved", 
+        es: isUpdate ? "Menú diario actualizado" : "Menú diario guardado", 
+        ca: isUpdate ? "Menú diari actualitzat" : "Menú diari guardat" 
       }),
       description: t({ 
-        en: "The daily menu has been successfully saved", 
-        es: "El menú diario ha sido guardado con éxito", 
-        ca: "El menú diari ha estat guardat amb èxit" 
+        en: isUpdate ? "The daily menu has been successfully updated" : "The daily menu has been successfully saved", 
+        es: isUpdate ? "El menú diario ha sido actualizado con éxito" : "El menú diario ha sido guardado con éxito", 
+        ca: isUpdate ? "El menú diari ha estat actualitzat amb èxit" : "El menú diari ha estat guardat amb èxit" 
       }),
     });
   };
@@ -242,11 +247,19 @@ const DailyPlanner: React.FC<DailyPlannerProps> = ({
               <Badge>{selectedMenuName}</Badge>
             </CardTitle>
             <CardDescription>
-              {t({ 
-                en: 'Select dishes for each course', 
-                es: 'Selecciona platos para cada curso', 
-                ca: 'Selecciona plats per a cada curs' 
-              })}
+              {currentMenuId ? (
+                t({ 
+                  en: 'Edit dishes for each course', 
+                  es: 'Editar platos para cada curso', 
+                  ca: 'Editar plats per a cada curs' 
+                })
+              ) : (
+                t({ 
+                  en: 'Select dishes for each course', 
+                  es: 'Selecciona platos para cada curso', 
+                  ca: 'Selecciona plats per a cada curs' 
+                })
+              )}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -304,7 +317,11 @@ const DailyPlanner: React.FC<DailyPlannerProps> = ({
             
             <div className="pt-4">
               <Button onClick={handleSave} className="w-full sm:w-auto">
-                {t({ en: 'Save Daily Menu', es: 'Guardar Menú Diario', ca: 'Guardar Menú Diari' })}
+                {currentMenuId ? (
+                  t({ en: 'Update Daily Menu', es: 'Actualizar Menú Diario', ca: 'Actualitzar Menú Diari' })
+                ) : (
+                  t({ en: 'Save Daily Menu', es: 'Guardar Menú Diario', ca: 'Guardar Menú Diari' })
+                )}
               </Button>
             </div>
           </CardContent>
