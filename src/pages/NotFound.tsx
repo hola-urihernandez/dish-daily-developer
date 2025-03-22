@@ -1,25 +1,44 @@
-import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
+import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/context/LanguageContext';
 
 const NotFound = () => {
-  const location = useLocation();
+  const { t } = useLanguage();
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    console.error(
-      "404 Error: User attempted to access non-existent route:",
-      location.pathname
-    );
-  }, [location.pathname]);
+    if (!loading && !user) {
+      navigate("/auth", { replace: true });
+    }
+  }, [user, loading, navigate]);
+
+  // If not authenticated, don't render anything while redirecting
+  if (!user && !loading) {
+    return null;
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">404</h1>
-        <p className="text-xl text-gray-600 mb-4">Oops! Page not found</p>
-        <a href="/" className="text-blue-500 hover:text-blue-700 underline">
-          Return to Home
-        </a>
-      </div>
+    <div className="flex flex-col items-center justify-center min-h-screen px-4 text-center">
+      <h1 className="text-9xl font-extrabold text-primary">404</h1>
+      <h2 className="mt-8 text-2xl font-semibold tracking-tight">
+        {t({ en: 'Page Not Found', es: 'Página No Encontrada', ca: 'Pàgina No Trobada' })}
+      </h2>
+      <p className="mt-4 text-muted-foreground">
+        {t({ 
+          en: 'The page you are looking for doesn\'t exist or has been moved.', 
+          es: 'La página que estás buscando no existe o ha sido movida.', 
+          ca: 'La pàgina que estàs buscant no existeix o ha estat moguda.' 
+        })}
+      </p>
+      <Button asChild className="mt-8">
+        <Link to="/">
+          {t({ en: 'Back to Home', es: 'Volver al Inicio', ca: 'Tornar a l\'Inici' })}
+        </Link>
+      </Button>
     </div>
   );
 };

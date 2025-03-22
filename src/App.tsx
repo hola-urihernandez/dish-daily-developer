@@ -3,9 +3,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { LanguageProvider } from "./context/LanguageContext";
 import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Index from "./pages/Index";
 import Dishes from "./pages/Dishes";
 import Menus from "./pages/Menus";
@@ -26,12 +27,52 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/dishes" element={<Dishes />} />
-              <Route path="/menus" element={<Menus />} />
-              <Route path="/daily-planner" element={<DailyPlanner />} />
+              {/* Public routes */}
               <Route path="/auth" element={<Auth />} />
-              <Route path="/profile" element={<Profile />} />
+              
+              {/* Protected routes */}
+              <Route 
+                path="/" 
+                element={
+                  <ProtectedRoute>
+                    <Index />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/dishes" 
+                element={
+                  <ProtectedRoute>
+                    <Dishes />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/menus" 
+                element={
+                  <ProtectedRoute>
+                    <Menus />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/daily-planner" 
+                element={
+                  <ProtectedRoute>
+                    <DailyPlanner />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/profile" 
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                } 
+              />
+              
+              {/* Fallback route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
