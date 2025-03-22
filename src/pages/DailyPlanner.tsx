@@ -160,7 +160,8 @@ const DailyPlannerPage = () => {
             menu_id: dailyMenu.menuId || null,
             first_course_id: dailyMenu.firstCourse,
             second_course_id: dailyMenu.secondCourse,
-            dessert_id: dailyMenu.dessert
+            dessert_id: dailyMenu.dessert,
+            user_id: user?.id // Add the user_id field
           })
           .select()
           .single();

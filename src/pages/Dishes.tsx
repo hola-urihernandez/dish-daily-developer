@@ -82,7 +82,8 @@ const Dishes = () => {
           name_en: dish.name.en,
           name_es: dish.name.es,
           name_ca: dish.name.ca,
-          type: dish.type
+          type: dish.type,
+          user_id: user?.id // Add the user_id field
         })
         .select()
         .single();

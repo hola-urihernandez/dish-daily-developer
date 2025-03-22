@@ -88,7 +88,8 @@ const Menus = () => {
           name_ca: menu.name.ca,
           description_en: menu.description?.en || '',
           description_es: menu.description?.es || '',
-          description_ca: menu.description?.ca || ''
+          description_ca: menu.description?.ca || '',
+          user_id: user?.id // Add the user_id field
         })
         .select()
         .single();
