@@ -9,6 +9,143 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      daily_menus: {
+        Row: {
+          created_at: string
+          date: string
+          dessert_id: string | null
+          first_course_id: string | null
+          id: string
+          menu_id: string | null
+          second_course_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          dessert_id?: string | null
+          first_course_id?: string | null
+          id?: string
+          menu_id?: string | null
+          second_course_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          dessert_id?: string | null
+          first_course_id?: string | null
+          id?: string
+          menu_id?: string | null
+          second_course_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daily_menus_dessert_id_fkey"
+            columns: ["dessert_id"]
+            isOneToOne: false
+            referencedRelation: "dishes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "daily_menus_first_course_id_fkey"
+            columns: ["first_course_id"]
+            isOneToOne: false
+            referencedRelation: "dishes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "daily_menus_menu_id_fkey"
+            columns: ["menu_id"]
+            isOneToOne: false
+            referencedRelation: "menus"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "daily_menus_second_course_id_fkey"
+            columns: ["second_course_id"]
+            isOneToOne: false
+            referencedRelation: "dishes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dishes: {
+        Row: {
+          created_at: string
+          id: string
+          name_ca: string
+          name_en: string
+          name_es: string
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name_ca: string
+          name_en: string
+          name_es: string
+          type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name_ca?: string
+          name_en?: string
+          name_es?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      menus: {
+        Row: {
+          created_at: string
+          description_ca: string | null
+          description_en: string | null
+          description_es: string | null
+          id: string
+          name_ca: string
+          name_en: string
+          name_es: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description_ca?: string | null
+          description_en?: string | null
+          description_es?: string | null
+          id?: string
+          name_ca: string
+          name_en: string
+          name_es: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description_ca?: string | null
+          description_en?: string | null
+          description_es?: string | null
+          id?: string
+          name_ca?: string
+          name_en?: string
+          name_es?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
