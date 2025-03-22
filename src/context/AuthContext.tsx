@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from "react
 import { User } from "@supabase/supabase-js";
 import { getCurrentUser, signIn, signOut, signUp } from "@/services/auth";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 type AuthContextType = {
   user: User | null;
@@ -149,6 +150,3 @@ export const useAuth = () => {
   }
   return context;
 };
-
-// Fix missing import
-import { supabase } from "@/integrations/supabase/client";
