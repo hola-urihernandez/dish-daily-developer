@@ -5,6 +5,7 @@ import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/context/LanguageContext';
 import LanguageSelector from './LanguageSelector';
+import UserMenu from './UserMenu';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -77,14 +78,16 @@ const Header = () => {
                 {t(link.label)}
               </Link>
             ))}
-            <div className="ml-4">
+            <div className="ml-4 flex items-center space-x-2">
               <LanguageSelector />
+              <UserMenu />
             </div>
           </nav>
 
           {/* Mobile Navigation Toggle */}
-          <div className="flex md:hidden">
+          <div className="flex md:hidden items-center">
             <LanguageSelector />
+            <UserMenu />
             <Button
               variant="ghost"
               size="icon"
