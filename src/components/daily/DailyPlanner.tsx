@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { 
@@ -57,6 +57,15 @@ const DailyPlanner: React.FC<DailyPlannerProps> = ({
   
   const { t, language } = useLanguage();
   const { toast } = useToast();
+
+  // Create a Map of dates with daily menus for calendar highlighting
+  const datesWithMenus = useMemo(() => {
+    const dateMap = new Map<string, boolean>();
+    dailyMenus.forEach(menu => {
+      dateMap.set(format(new Date(menu.date), 'yyyy-MM-dd'), true);
+    });
+    return dateMap;
+  }, [dailyMenus]);
 
   // Find existing daily menu for selected date
   const findExistingDailyMenu = (date?: Date): DailyMenu | undefined => {
@@ -152,6 +161,26 @@ const DailyPlanner: React.FC<DailyPlannerProps> = ({
     ? menus.find(menu => menu.id === selectedMenuId)?.name[language] 
     : '';
 
+  // Custom day rendering function for the calendar
+  const renderDay = (day: Date, modifiers: { disabled: boolean; today: boolean; selected: boolean }) => {
+    const dateStr = format(day, 'yyyy-MM-dd');
+    const hasMenu = datesWithMenus.has(dateStr);
+    
+    return (
+      <div
+        className={cn(
+          "h-9 w-9 p-0 font-normal flex items-center justify-center",
+          hasMenu && !modifiers.selected && "bg-violet-100 text-violet-900 rounded-md",
+          modifiers.selected && "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+          modifiers.today && !modifiers.selected && "bg-accent text-accent-foreground",
+          modifiers.disabled && "text-muted-foreground opacity-50"
+        )}
+      >
+        {day.getDate()}
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-6">
       <Card>
@@ -231,6 +260,9 @@ const DailyPlanner: React.FC<DailyPlannerProps> = ({
                     onSelect={handleDateChange}
                     initialFocus
                     className="p-3 pointer-events-auto"
+                    components={{
+                      Day: ({ date: day, ...props }) => renderDay(day, props as any)
+                    }}
                   />
                 </PopoverContent>
               </Popover>
