@@ -56,7 +56,8 @@ const DailyPlanner: React.FC<DailyPlannerProps> = ({
   const datesWithMenus = useMemo(() => {
     const dateMap = new Map<string, boolean>();
     dailyMenus.forEach(menu => {
-      dateMap.set(format(new Date(menu.date), 'yyyy-MM-dd'), true);
+      const dateStr = format(new Date(menu.date), 'yyyy-MM-dd');
+      dateMap.set(dateStr, true);
     });
     return dateMap;
   }, [dailyMenus]);
@@ -155,22 +156,24 @@ const DailyPlanner: React.FC<DailyPlannerProps> = ({
     ? menus.find(menu => menu.id === selectedMenuId)?.name[language] 
     : '';
 
-  // Custom day rendering function for the calendar
-  const renderDay = (day: Date, modifiers: { disabled: boolean; today: boolean; selected: boolean }) => {
+  // Custom rendering function for the calendar days
+  const renderCalendarDay = (day: Date, modifiers: Record<string, boolean>) => {
+    // Format the date to YYYY-MM-DD for comparison
     const dateStr = format(day, 'yyyy-MM-dd');
+    // Check if this date has a menu
     const hasMenu = datesWithMenus.has(dateStr);
     
     return (
       <div
         className={cn(
-          "h-9 w-9 p-0 font-normal flex items-center justify-center",
-          hasMenu && !modifiers.selected && "bg-violet-100 text-violet-900 rounded-md",
-          modifiers.selected && "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+          "h-9 w-9 p-0 font-normal aria-selected:opacity-100",
+          hasMenu && !modifiers.selected && "bg-violet-100 text-violet-900 hover:bg-violet-200",
+          modifiers.selected && "bg-primary text-primary-foreground",
           modifiers.today && !modifiers.selected && "bg-accent text-accent-foreground",
-          modifiers.disabled && "text-muted-foreground opacity-50"
+          "flex items-center justify-center rounded-md"
         )}
       >
-        {day.getDate()}
+        {format(day, 'd')}
       </div>
     );
   };
@@ -252,7 +255,7 @@ const DailyPlanner: React.FC<DailyPlannerProps> = ({
                 onSelect={handleDateChange}
                 className="rounded-md border"
                 components={{
-                  Day: ({ date: day, ...props }) => renderDay(day, props as any)
+                  Day: ({ date: dayDate, ...props }) => renderCalendarDay(dayDate, props as Record<string, boolean>)
                 }}
               />
             </CardContent>
