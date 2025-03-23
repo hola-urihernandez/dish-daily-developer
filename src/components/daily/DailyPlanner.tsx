@@ -162,13 +162,17 @@ const DailyPlanner: React.FC<DailyPlannerProps> = ({
     // Check if this date has a menu
     const hasMenu = datesWithMenus.has(dateStr);
     
+    // Check if this is the currently selected day (format both for comparison)
+    const isSelectedDay = date && format(day, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd');
+    
     return (
       <div
         className={cn(
           "h-9 w-9 p-0 font-normal aria-selected:opacity-100",
           hasMenu && !modifiers.selected && "bg-violet-100 text-violet-900 hover:bg-violet-200",
           modifiers.selected && "bg-primary text-primary-foreground",
-          modifiers.today && !modifiers.selected && "bg-accent text-accent-foreground",
+          isSelectedDay && !modifiers.selected && "bg-blue-500 text-white", // New style for selected day
+          modifiers.today && !modifiers.selected && !isSelectedDay && "bg-accent text-accent-foreground",
           "flex items-center justify-center rounded-md"
         )}
       >
