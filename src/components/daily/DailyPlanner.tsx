@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { format } from 'date-fns';
 import { 
@@ -141,7 +140,7 @@ const DailyPlanner: React.FC<DailyPlannerProps> = ({
       description: t({ 
         en: isUpdate ? "The daily menu has been successfully updated" : "The daily menu has been successfully saved", 
         es: isUpdate ? "El menú diario ha sido actualizado con éxito" : "El menú diario ha sido guardado con éxito", 
-        ca: isUpdate ? "El menú diari ha estat actualitzat amb èxit" : "El menú diari ha estat guardat amb èxit" 
+        ca: isUpdate ? "El menú diario ha estat actualitzat amb èxit" : "El menú diari ha estat guardat amb èxit" 
       }),
     });
   };
@@ -157,7 +156,7 @@ const DailyPlanner: React.FC<DailyPlannerProps> = ({
     : '';
 
   // Custom rendering function for the calendar days
-  const renderCalendarDay = (day: Date, modifiers: Record<string, boolean>) => {
+  const renderCalendarDay = (day: Date, modifiers: any) => {
     // Format the date to YYYY-MM-DD for comparison
     const dateStr = format(day, 'yyyy-MM-dd');
     // Check if this date has a menu
@@ -255,7 +254,7 @@ const DailyPlanner: React.FC<DailyPlannerProps> = ({
                 onSelect={handleDateChange}
                 className="rounded-md border"
                 components={{
-                  Day: ({ date: dayDate, ...props }) => renderCalendarDay(dayDate, props as Record<string, boolean>)
+                  Day: ({ date: dayDate, ...props }) => renderCalendarDay(dayDate, props)
                 }}
               />
             </CardContent>
