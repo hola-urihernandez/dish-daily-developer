@@ -1,7 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
 import { format } from 'date-fns';
-import { Calendar as CalendarIcon } from 'lucide-react';
 import { 
   Select, 
   SelectContent, 
@@ -18,11 +17,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { DailyMenu, Dish, Menu } from '@/types';
@@ -183,182 +177,192 @@ const DailyPlanner: React.FC<DailyPlannerProps> = ({
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            {t({ en: 'Daily Menu Planner', es: 'Planificador de Menú Diario', ca: 'Planificador de Menú Diari' })}
-          </CardTitle>
-          <CardDescription>
-            {t({ 
-              en: 'Select a menu type and date to plan your daily menu', 
-              es: 'Selecciona un tipo de menú y fecha para planificar tu menú diario', 
-              ca: 'Selecciona un tipus de menú i data per planificar el teu menú diari' 
-            })}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="text-sm font-medium mb-1.5 block">
-                {t({ en: 'Menu Type', es: 'Tipo de Menú', ca: 'Tipus de Menú' })}
-              </label>
-              <Select value={selectedMenuId || ''} onValueChange={setSelectedMenuId}>
-                <SelectTrigger>
-                  <SelectValue placeholder={t({ 
-                    en: 'Select a menu', 
-                    es: 'Selecciona un menú', 
-                    ca: 'Selecciona un menú' 
-                  })} />
-                </SelectTrigger>
-                <SelectContent>
-                  {menus.length === 0 ? (
-                    <div className="py-6 text-center">
-                      <p className="text-sm text-muted-foreground">
-                        {t({ 
-                          en: 'No menus available. Create a menu first.', 
-                          es: 'No hay menús disponibles. Crea un menú primero.', 
-                          ca: 'No hi ha menús disponibles. Crea un menú primer.' 
-                        })}
-                      </p>
-                    </div>
-                  ) : (
-                    menus.map(menu => (
-                      <SelectItem key={menu.id} value={menu.id}>
-                        {menu.name[language]}
-                      </SelectItem>
-                    ))
-                  )}
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div>
-              <label className="text-sm font-medium mb-1.5 block">
-                {t({ en: 'Date', es: 'Fecha', ca: 'Data' })}
-              </label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !date && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {date ? format(date, 'PPP') : t({ 
-                      en: 'Pick a date', 
-                      es: 'Elige una fecha', 
-                      ca: 'Tria una data' 
-                    })}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={handleDateChange}
-                    initialFocus
-                    className="p-3 pointer-events-auto"
-                    components={{
-                      Day: ({ date: day, ...props }) => renderDay(day, props as any)
-                    }}
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Left column - Menu selection and calendar */}
+        <div className="md:col-span-1 space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                {t({ en: 'Select Menu', es: 'Seleccionar Menú', ca: 'Seleccionar Menú' })}
+              </CardTitle>
+              <CardDescription>
+                {t({ 
+                  en: 'Choose a menu type and date', 
+                  es: 'Elige un tipo de menú y fecha', 
+                  ca: 'Escull un tipus de menú i data' 
+                })}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium mb-1.5 block">
+                    {t({ en: 'Menu Type', es: 'Tipo de Menú', ca: 'Tipus de Menú' })}
+                  </label>
+                  <Select value={selectedMenuId || ''} onValueChange={setSelectedMenuId}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t({ 
+                        en: 'Select a menu', 
+                        es: 'Selecciona un menú', 
+                        ca: 'Selecciona un menú' 
+                      })} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {menus.length === 0 ? (
+                        <div className="py-6 text-center">
+                          <p className="text-sm text-muted-foreground">
+                            {t({ 
+                              en: 'No menus available. Create a menu first.', 
+                              es: 'No hay menús disponibles. Crea un menú primero.', 
+                              ca: 'No hi ha menús disponibles. Crea un menú primer.' 
+                            })}
+                          </p>
+                        </div>
+                      ) : (
+                        menus.map(menu => (
+                          <SelectItem key={menu.id} value={menu.id}>
+                            {menu.name[language]}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                {t({ en: 'Calendar', es: 'Calendario', ca: 'Calendari' })}
+              </CardTitle>
+              <CardDescription>
+                {t({ 
+                  en: 'Days with menus are highlighted', 
+                  es: 'Los días con menús están resaltados', 
+                  ca: 'Els dies amb menús estan ressaltats' 
+                })}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Calendar
+                mode="single"
+                selected={date}
+                onSelect={handleDateChange}
+                className="rounded-md border"
+                components={{
+                  Day: ({ date: day, ...props }) => renderDay(day, props as any)
+                }}
+              />
+            </CardContent>
+          </Card>
+        </div>
 
-      {date && selectedMenuId && (
-        <Card className="animate-fade-in">
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <span>{format(date, 'PPPP')}</span>
-              <Badge>{selectedMenuName}</Badge>
-            </CardTitle>
-            <CardDescription>
-              {currentMenuId ? (
-                t({ 
-                  en: 'Edit dishes for each course', 
-                  es: 'Editar platos para cada curso', 
-                  ca: 'Editar plats per a cada curs' 
-                })
-              ) : (
-                t({ 
-                  en: 'Select dishes for each course', 
-                  es: 'Selecciona platos para cada curso', 
-                  ca: 'Selecciona plats per a cada curs' 
-                })
-              )}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div>
-              <h3 className="text-sm font-medium mb-3">
-                {t({ en: 'First Course', es: 'Primer Plato', ca: 'Primer Plat' })}
-              </h3>
-              <DishSelector
-                dishes={getDishesByType('first')}
-                selectedDishId={selectedFirstCourse}
-                onSelectDish={setSelectedFirstCourse}
-                placeholder={t({ 
-                  en: 'Select first course', 
-                  es: 'Selecciona primer plato', 
-                  ca: 'Selecciona primer plat' 
-                })}
-              />
-            </div>
-            
-            <Separator />
-            
-            <div>
-              <h3 className="text-sm font-medium mb-3">
-                {t({ en: 'Second Course', es: 'Segundo Plato', ca: 'Segon Plat' })}
-              </h3>
-              <DishSelector
-                dishes={getDishesByType('second')}
-                selectedDishId={selectedSecondCourse}
-                onSelectDish={setSelectedSecondCourse}
-                placeholder={t({ 
-                  en: 'Select second course', 
-                  es: 'Selecciona segundo plato', 
-                  ca: 'Selecciona segon plat' 
-                })}
-              />
-            </div>
-            
-            <Separator />
-            
-            <div>
-              <h3 className="text-sm font-medium mb-3">
-                {t({ en: 'Dessert', es: 'Postre', ca: 'Postres' })}
-              </h3>
-              <DishSelector
-                dishes={getDishesByType('dessert')}
-                selectedDishId={selectedDessert}
-                onSelectDish={setSelectedDessert}
-                placeholder={t({ 
-                  en: 'Select dessert', 
-                  es: 'Selecciona postre', 
-                  ca: 'Selecciona postres' 
-                })}
-              />
-            </div>
-            
-            <div className="pt-4">
-              <Button onClick={handleSave} className="w-full sm:w-auto">
-                {currentMenuId ? (
-                  t({ en: 'Update Daily Menu', es: 'Actualizar Menú Diario', ca: 'Actualitzar Menú Diari' })
-                ) : (
-                  t({ en: 'Save Daily Menu', es: 'Guardar Menú Diario', ca: 'Guardar Menú Diari' })
-                )}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+        {/* Right column - Daily menu details */}
+        <div className="md:col-span-2">
+          {date ? (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <span>{format(date, 'PPPP')}</span>
+                  {selectedMenuId && <Badge>{selectedMenuName}</Badge>}
+                </CardTitle>
+                <CardDescription>
+                  {currentMenuId ? (
+                    t({ 
+                      en: 'Edit dishes for each course', 
+                      es: 'Editar platos para cada curso', 
+                      ca: 'Editar plats per a cada curs' 
+                    })
+                  ) : (
+                    t({ 
+                      en: 'Select dishes for each course', 
+                      es: 'Selecciona platos para cada curso', 
+                      ca: 'Selecciona plats per a cada curs' 
+                    })
+                  )}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div>
+                  <h3 className="text-sm font-medium mb-3">
+                    {t({ en: 'First Course', es: 'Primer Plato', ca: 'Primer Plat' })}
+                  </h3>
+                  <DishSelector
+                    dishes={getDishesByType('first')}
+                    selectedDishId={selectedFirstCourse}
+                    onSelectDish={setSelectedFirstCourse}
+                    placeholder={t({ 
+                      en: 'Select first course', 
+                      es: 'Selecciona primer plato', 
+                      ca: 'Selecciona primer plat' 
+                    })}
+                  />
+                </div>
+                
+                <Separator />
+                
+                <div>
+                  <h3 className="text-sm font-medium mb-3">
+                    {t({ en: 'Second Course', es: 'Segundo Plato', ca: 'Segon Plat' })}
+                  </h3>
+                  <DishSelector
+                    dishes={getDishesByType('second')}
+                    selectedDishId={selectedSecondCourse}
+                    onSelectDish={setSelectedSecondCourse}
+                    placeholder={t({ 
+                      en: 'Select second course', 
+                      es: 'Selecciona segundo plato', 
+                      ca: 'Selecciona segon plat' 
+                    })}
+                  />
+                </div>
+                
+                <Separator />
+                
+                <div>
+                  <h3 className="text-sm font-medium mb-3">
+                    {t({ en: 'Dessert', es: 'Postre', ca: 'Postres' })}
+                  </h3>
+                  <DishSelector
+                    dishes={getDishesByType('dessert')}
+                    selectedDishId={selectedDessert}
+                    onSelectDish={setSelectedDessert}
+                    placeholder={t({ 
+                      en: 'Select dessert', 
+                      es: 'Selecciona postre', 
+                      ca: 'Selecciona postres' 
+                    })}
+                  />
+                </div>
+                
+                <div className="pt-4">
+                  <Button onClick={handleSave} className="w-full sm:w-auto">
+                    {currentMenuId ? (
+                      t({ en: 'Update Daily Menu', es: 'Actualizar Menú Diario', ca: 'Actualitzar Menú Diari' })
+                    ) : (
+                      t({ en: 'Save Daily Menu', es: 'Guardar Menú Diario', ca: 'Guardar Menú Diari' })
+                    )}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card>
+              <CardContent className="flex flex-col items-center justify-center py-12">
+                <p className="text-muted-foreground">
+                  {t({ 
+                    en: 'Please select a date from the calendar to plan your menu', 
+                    es: 'Por favor selecciona una fecha del calendario para planificar tu menú', 
+                    ca: 'Si us plau selecciona una data del calendari per planificar el teu menú' 
+                  })}
+                </p>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
